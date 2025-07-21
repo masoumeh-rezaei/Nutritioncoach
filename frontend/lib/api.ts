@@ -1,23 +1,24 @@
-// lib/api.ts
-import axios from 'axios';
+export const api = async ({
+                              url,
+                              method,
+                              data,
+                          }: {
+    url: string
+    method: string
+    data?: any
+}): Promise<any> => {
+    const res = await fetch(`http://127.0.0.1:5000${url}`, {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: data ? JSON.stringify(data) : undefined,
+    })
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000/api';
+    if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error?.error || 'Something went wrong')
+    }
 
-export const api = axios.create({
-    baseURL: API_BASE_URL,
-    withCredentials: true, // برای کوکی‌های JWT
-    headers: {
-        'Content-Type': 'application/json',
-    },
-});
-
-// توابع آماده برای استفاده در فرم‌ها:
-export const loginUser = async (email: string, password: string) => {
-    const response = await api.post('/login', { email, password });
-    return response.data;
-};
-
-export const registerUser = async (name: string, email: string, password: string) => {
-    const response = await api.post('/register', { name, email, password });
-    return response.data;
-};
+    return res.json()
+}
