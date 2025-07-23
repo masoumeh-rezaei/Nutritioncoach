@@ -1,6 +1,6 @@
 # backend/auth.py
 from flask import Blueprint, request, jsonify
-from models import db, User, bcrypt
+from backend.models import db, User, bcrypt
 
 auth_bp = Blueprint('auth', __name__)
 
