@@ -1,3 +1,4 @@
+// frontend/pages/register.tsx (یا مسیر مربوطه)
 'use client'
 
 import { useState } from 'react'
@@ -5,6 +6,7 @@ import { useRegister } from '@/lib/Hooks/useAuth'
 import { useRouter } from 'next/navigation'
 
 export default function RegisterPage() {
+    const [name, setName] = useState('') // 👈 اضافه کردن state برای نام
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const router = useRouter()
@@ -14,9 +16,10 @@ export default function RegisterPage() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         registerMutation.mutate(
-            { email, password },
+            { name, email, password }, // 👈 ارسال نام به mutate
             {
                 onSuccess: () => {
+                    setName('') // پاک کردن فیلد نام بعد از موفقیت
                     setEmail('')
                     setPassword('')
                     setTimeout(() => router.push('/login'), 1500)
@@ -39,6 +42,19 @@ export default function RegisterPage() {
             )}
 
             <form onSubmit={handleSubmit}>
+                {/* 👈 اضافه کردن فیلد ورودی برای نام */}
+                <div className="mb-4">
+                    <label className="block mb-1">Name</label>
+                    <input
+                        type="text" // معمولا برای نام از type="text" استفاده می شود
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full px-3 py-2 border rounded"
+                        placeholder="Your Name"
+                    />
+                </div>
+
                 <div className="mb-4">
                     <label className="block mb-1">Email</label>
                     <input
