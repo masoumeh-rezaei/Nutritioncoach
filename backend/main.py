@@ -1,8 +1,27 @@
-# backend/main.py
+# backend/app.py
+from flask import Flask
+from flask_cors import CORS
+from models import db, bcrypt
+from auth import auth_bp
 
-from app import create_app
+def create_app():
+    app = Flask(__name__) # 👈 اول app رو ایجاد می‌کنیم
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SECRET_KEY'] = 'your_super_secret_key_change_this!'
 
-app = create_app()
+    CORS(app, origins=["http://localhost:3000"]) # به جای CORS(app)
 
-if __name__ == "__main__":
+    db.init_app(app)
+    bcrypt.init_app(app)
+
+    app.register_blueprint(auth_bp, url_prefix='/api/auth') # 👈 و بعد Blueprintها رو ثبت می‌کنیم
+
+    with app.app_context():
+        db.create_all()
+
+    return app
+
+if __name__ == '__main__':
+    app = create_app()
     app.run(debug=True)
