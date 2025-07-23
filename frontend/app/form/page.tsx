@@ -1,78 +1,92 @@
-'use client';
+// app/form/page.tsx
+'use client'
 
-import { useState } from 'react';
-import Input from '@/components/Input';
-import Button from '@/components/Button';
-import FormWrapper from '@/components/FormWrapper';
-import { api } from '@/lib/api';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react'
+import { useConsultation } from '@/lib/Hooks/useConsultation'
 
-export default function NutritionFormPage() {
-    const router = useRouter();
-    const [formData, setFormData] = useState({
-        age: '',
-        height: '',
+export default function ConsultationFormPage() {
+    const [form, setForm] = useState({
         weight: '',
-        goal: 'lose',
-        activityLevel: 'low',
-    });
-    const [loading, setLoading] = useState(false);
-    const [successMsg, setSuccessMsg] = useState('');
-    const [errorMsg, setErrorMsg] = useState('');
+        height: '',
+        age: '',
+        goal: 'maintain',
+    })
+
+    const { mutate, isPending, isSuccess, isError, error } = useConsultation()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
+        const { name, value } = e.target
+        setForm((prev) => ({ ...prev, [name]: value }))
+    }
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        setErrorMsg('');
-        setSuccessMsg('');
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
 
-        try {
-            await api.post('/nutrition-form', formData);
-            setSuccessMsg('فرم با موفقیت ارسال شد!');
-            setFormData({ age: '', height: '', weight: '', goal: 'lose', activityLevel: 'low' });
-            // router.push('/dashboard'); // اگر خواستی کاربر رو برگردونی
-        } catch (err: any) {
-            setErrorMsg(err.response?.data?.message || 'خطایی رخ داد.');
-        } finally {
-            setLoading(false);
-        }
-    };
+        mutate({
+            weight: Number(form.weight),
+            height: Number(form.height),
+            age: Number(form.age),
+            goal: form.goal as 'gain' | 'loss' | 'maintain',
+        })
+    }
 
     return (
-        <FormWrapper title="فرم مشاوره تغذیه">
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <Input label="سن" name="age" type="number" value={formData.age} onChange={handleChange} required />
-                <Input label="قد (سانتی‌متر)" name="height" type="number" value={formData.height} onChange={handleChange} required />
-                <Input label="وزن (کیلوگرم)" name="weight" type="number" value={formData.weight} onChange={handleChange} required />
+        <div className="max-w-md mx-auto p-6 rounded-xl shadow-md mt-10 bg-white">
+            <h2 className="text-2xl font-bold mb-4">Nutrition Consultation</h2>
 
-                <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium text-gray-700">هدف</label>
-                    <select name="goal" value={formData.goal} onChange={handleChange} className="border border-gray-300 rounded-md px-3 py-2">
-                        <option value="lose">کاهش وزن</option>
-                        <option value="gain">افزایش وزن</option>
-                        <option value="maintain">تثبیت وزن</option>
-                    </select>
-                </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <input
+                    type="number"
+                    name="weight"
+                    placeholder="Weight (kg)"
+                    value={form.weight}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded"
+                    required
+                />
 
-                <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium text-gray-700">سطح فعالیت بدنی</label>
-                    <select name="activityLevel" value={formData.activityLevel} onChange={handleChange} className="border border-gray-300 rounded-md px-3 py-2">
-                        <option value="low">کم</option>
-                        <option value="medium">متوسط</option>
-                        <option value="high">زیاد</option>
-                    </select>
-                </div>
+                <input
+                    type="number"
+                    name="height"
+                    placeholder="Height (cm)"
+                    value={form.height}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded"
+                    required
+                />
 
-                {successMsg && <p className="text-green-600 text-sm">{successMsg}</p>}
-                {errorMsg && <p className="text-red-600 text-sm">{errorMsg}</p>}
+                <input
+                    type="number"
+                    name="age"
+                    placeholder="Age"
+                    value={form.age}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded"
+                    required
+                />
 
-                <Button type="submit" loading={loading}>ارسال فرم</Button>
+                <select
+                    name="goal"
+                    value={form.goal}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded"
+                >
+                    <option value="gain">Gain Weight</option>
+                    <option value="loss">Lose Weight</option>
+                    <option value="maintain">Maintain Weight</option>
+                </select>
+
+                <button
+                    type="submit"
+                    className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+                    disabled={isPending}
+                >
+                    {isPending ? 'Submitting...' : 'Submit'}
+                </button>
+
+                {isSuccess && <p className="text-green-600 mt-2">Submitted successfully!</p>}
+                {isError && <p className="text-red-600 mt-2">Error: {error.message}</p>}
             </form>
-        </FormWrapper>
-    );
+        </div>
+    )
 }

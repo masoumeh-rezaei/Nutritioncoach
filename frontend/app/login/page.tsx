@@ -19,7 +19,7 @@ export default function LoginPage() {
                 onSuccess: () => {
                     setEmail('')
                     setPassword('')
-                    setTimeout(() => router.push('/dashboard'), 1500)
+                    setTimeout(() => router.push('/form'), 1500)
                 },
             }
         )
