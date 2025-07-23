@@ -4,6 +4,7 @@ from flask_cors import CORS
 from backend.models import db, bcrypt
 from backend.auth import auth_bp
 from flask_migrate import Migrate
+from backend.consultation import consultation_bp
 
 
 
@@ -20,6 +21,7 @@ def create_app():
     bcrypt.init_app(app)
     migrate = Migrate(app, db)
     app.register_blueprint(auth_bp, url_prefix='/api/auth') # 👈 و بعد Blueprintها رو ثبت می‌کنیم
+    app.register_blueprint(consultation_bp, url_prefix='/api/consultation')
 
     with app.app_context():
         db.create_all()
