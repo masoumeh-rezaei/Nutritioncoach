@@ -26,19 +26,3 @@ def submit_consultation():
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Error submitting consultation", "error": str(e)}), 500
-
-# فایل: backend/models.py (ادامه)
-from datetime import datetime
-
-class Consultation(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    goal = db.Column(db.String(128))
-    age = db.Column(db.Integer)
-    weight = db.Column(db.Float)
-    height = db.Column(db.Float)
-    activity_level = db.Column(db.String(64))
-    notes = db.Column(db.Text)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    user = db.relationship('User', backref=db.backref('consultations', lazy=True))
