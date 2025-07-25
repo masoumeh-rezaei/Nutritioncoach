@@ -16,6 +16,7 @@ def create_app():
     app.config['SECRET_KEY'] = 'your_super_secret_key_change_this!'
 
     CORS(app, origins=["http://localhost:3000"]) # به جای CORS(app)
+    CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
     db.init_app(app)
     bcrypt.init_app(app)
