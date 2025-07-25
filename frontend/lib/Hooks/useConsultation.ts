@@ -7,6 +7,7 @@ type ConsultationPayload = {
     height: number
     age: number
     goal: 'gain' | 'loss' | 'maintain'
+    userId: number
 }
 
 export const useConsultation = () => {
