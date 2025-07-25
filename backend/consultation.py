@@ -3,9 +3,10 @@ from backend.models import db, Consultation
 
 consultation_bp = Blueprint('consultation', __name__)
 
-@consultation_bp.route('/submit', methods=['POST'])
+@consultation_bp.route('', methods=['POST'])
 def submit_consultation():
     data = request.get_json()
+    print("Received data:", data)
 
     if not data or not data.get('user_id'):
         return jsonify({"message": "user_id is required"}), 400

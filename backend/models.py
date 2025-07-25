@@ -23,6 +23,9 @@ class User(db.Model):
 
 
 class Consultation(db.Model):
+    __tablename__ = 'consultation'
+    __table_args__ = {'extend_existing': True}
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     goal = db.Column(db.String(128))
