@@ -1,7 +1,8 @@
 # backend/auth.py
 from flask import Blueprint, request, jsonify
 from backend.models import db, User
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, create_refresh_token,jwt_required, get_jwt_identity
+
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -16,8 +17,10 @@ def login():
     user = User.query.filter_by(email=email).first()
     if user and user.check_password(password):
         access_token = create_access_token(identity=user.id)
+        refresh_token = create_refresh_token(identity=user.id)
         return jsonify({"message": "Login successful",
                         'access_token': access_token,
+                        'refresh_token': refresh_token,
                         "user_id": user.id ,
                         }), 200
     else:
@@ -52,3 +55,11 @@ def register():
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "An error occurred during registration", "error": str(e)}), 500
+
+
+@auth_bp.route('/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh():
+    current_user = get_jwt_identity()
+    new_access_token = create_access_token(identity=current_user)
+    return jsonify(access_token=new_access_token), 200
