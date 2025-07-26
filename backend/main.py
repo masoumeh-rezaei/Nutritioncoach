@@ -8,7 +8,7 @@ from flask_migrate import Migrate
 from backend.consultation import consultation_bp
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
-
+from backend.profile import profile_bp
 
 def create_app():
     app = Flask(__name__)
@@ -28,7 +28,7 @@ def create_app():
     jwt = JWTManager(app)
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(consultation_bp, url_prefix='/api/consultation')
-
+    app.register_blueprint(profile_bp, url_prefix='/api')
     with app.app_context():
         db.create_all()
 
