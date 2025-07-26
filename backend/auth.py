@@ -1,5 +1,5 @@
 # backend/auth.py
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify,make_response
 from backend.models import db, User
 from flask_jwt_extended import(
     create_access_token,
@@ -11,6 +11,7 @@ from flask_jwt_extended import(
 auth_bp = Blueprint('auth', __name__)
 
 
+
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -19,16 +20,33 @@ def login():
 
     email = data['email']
     password = data['password']
-
     user = User.query.filter_by(email=email).first()
     if user and user.check_password(password):
         access_token = create_access_token(identity=user.id)
         refresh_token = create_refresh_token(identity=user.id)
-        return jsonify({"message": "Login successful",
-                        'access_token': access_token,
-                        'refresh_token': refresh_token,
-                        "user_id": user.id ,
-                        }), 200
+
+
+        # ✅ ساخت پاسخ و ست کردن توکن‌ها در کوکی
+        response = make_response(jsonify({
+            "message": "Login successful",
+            "user_id": user.id
+        }))
+        response.set_cookie(
+            "access_token",
+            access_token,
+            httponly=True,
+            secure=False,         # در لوکال False، در production باید True باشه
+            samesite="Lax"
+        )
+        response.set_cookie(
+            "refresh_token",
+            refresh_token,
+            httponly=True,
+            secure=False,
+            samesite="Lax"
+        )
+        return response
+
     else:
         return jsonify({"message": "Invalid credentials"}), 401
 

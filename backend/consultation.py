@@ -8,15 +8,14 @@ consultation_bp = Blueprint('consultation', __name__)
 CORS(consultation_bp)
 
 @consultation_bp.route('/submit', methods=['POST'])
-@jwt_required
+@jwt_required()
 def submit_consultation():
     current_user_id = get_jwt_identity()
     data = request.get_json()
     print("Received data:", data)
 
 
-    if not data or not data.get('userId'):
-        print("Debug: Data is missing or 'userId' is not found.")
+    if not data :
         return jsonify({"message": "userId is required"}), 400
 
 
@@ -35,7 +34,6 @@ def submit_consultation():
         return jsonify({"message": "Consultation submitted successfully"}), 201
     except Exception as e:
         db.session.rollback()
-
         traceback.print_exc()
         print("-------------------------------------------\n")
         return jsonify({"message": "Error submitting consultation", "error": str(e)}), 500
