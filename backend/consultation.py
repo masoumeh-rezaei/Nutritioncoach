@@ -2,25 +2,27 @@ from flask import Blueprint, request, jsonify
 from backend.models import db, Consultation
 from flask_cors import CORS
 import traceback
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 consultation_bp = Blueprint('consultation', __name__)
 CORS(consultation_bp)
 
 @consultation_bp.route('/submit', methods=['POST'])
+@jwt_required
 def submit_consultation():
+    current_user_id = get_jwt_identity()
     data = request.get_json()
     print("Received data:", data)
 
 
-    if not data or not data.get('userId'): # اینجا 'userId' رو چک کن
+    if not data or not data.get('userId'):
         print("Debug: Data is missing or 'userId' is not found.")
         return jsonify({"message": "userId is required"}), 400
 
 
     try:
         consultation = Consultation(
-
-            user_id=data['userId'],
+            user_id=current_user_id,
             goal=data.get('goal'),
             age=data.get('age'),
             weight=data.get('weight'),
