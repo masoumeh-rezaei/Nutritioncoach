@@ -10,6 +10,7 @@ export default function ConsultationFormPage() {
         height: '',
         age: '',
         goal: 'maintain',
+        userId: '', // مقدار اولیه را خالی قرار دهید تا کاربر وارد کند
     })
 
     const { mutate, isPending, isSuccess, isError, error } = useConsultation()
@@ -27,6 +28,7 @@ export default function ConsultationFormPage() {
             height: Number(form.height),
             age: Number(form.age),
             goal: form.goal as 'gain' | 'loss' | 'maintain',
+            userId: Number(form.userId), // userId را از فرم می‌خوانیم
         })
     }
 
@@ -75,6 +77,17 @@ export default function ConsultationFormPage() {
                     <option value="loss">Lose Weight</option>
                     <option value="maintain">Maintain Weight</option>
                 </select>
+
+                {/* اضافه کردن فیلد ورودی برای userId */}
+                <input
+                    type="number"
+                    name="userId"
+                    placeholder="User ID"
+                    value={form.userId}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded"
+                    required // اگر userId اجباری است
+                />
 
                 <button
                     type="submit"

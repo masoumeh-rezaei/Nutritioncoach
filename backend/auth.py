@@ -1,10 +1,11 @@
 # backend/auth.py
 from flask import Blueprint, request, jsonify
-from backend.models import db, User, bcrypt
+from backend.models import db, User
+from flask_jwt_extended import create_access_token
 
 auth_bp = Blueprint('auth', __name__)
 
-# مسیر login (از روز 2)
+
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -14,16 +15,20 @@ def login():
     password = data['password']
     user = User.query.filter_by(email=email).first()
     if user and user.check_password(password):
-        return jsonify({"message": "Login successful", "user_id": user.id}), 200
+        access_token = create_access_token(identity=user.id)
+        return jsonify({"message": "Login successful",
+                        'access_token': access_token,
+                        "user_id": user.id ,
+                        }), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
 
-# مسیر register (وظیفه امروز - روز 4)
+
 @auth_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
 
-    # بررسی وجود تمام فیلدهای لازم: نام، ایمیل، و رمز عبور
+
     if not data or not data.get('name') or not data.get('email') or not data.get('password'):
         return jsonify({"message": "Name, email, and password are required"}), 400
 
@@ -31,14 +36,14 @@ def register():
     email = data['email']
     password = data['password']
 
-    # بررسی اینکه آیا کاربر با این ایمیل از قبل وجود دارد
+
     existing_user = User.query.filter_by(email=email).first()
     if existing_user:
         return jsonify({"message": "User with this email already exists"}), 409 # Conflict
 
-    # ایجاد کاربر جدید
+
     new_user = User(name=name, email=email)
-    new_user.set_password(password) # هش کردن و تنظیم رمز عبور با استفاده از متد مدل
+    new_user.set_password(password)
 
     try:
         db.session.add(new_user)
