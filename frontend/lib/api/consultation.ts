@@ -1,14 +1,11 @@
-// lib/api/consultation.ts
-import { api } from '@/lib/api'
+import axiosClient from '@/lib/axiosClient'
 
-type ConsultationPayload = {
+export const submitConsultation = async (data: {
     weight: number
     height: number
     age: number
     goal: 'gain' | 'loss' | 'maintain'
-    userId: number
-}
-
-export const submitConsultation = (data: ConsultationPayload) => {
-    return api({ url: '/api/consultation/submit', method: 'POST', data })
+}) => {
+    const res = await axiosClient.post('/api/consultation/submit', data)
+    return res.data
 }

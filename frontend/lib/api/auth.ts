@@ -1,17 +1,25 @@
-import { api } from '@/lib/api'
+import axiosClient from '@/lib/axiosClient'
 
 type AuthPayload = {
     email: string
     password: string
-    name?: string // برای رجیستر، فیلد name هم باید اضافه شود
 }
 
-export const registerUser = (data: AuthPayload) => {
-    // URL صحیح: شامل /auth
-    return api({ url: '/api/auth/register', method: 'POST', data })
+export const loginUser = async (data: AuthPayload) => {
+    const res = await axiosClient.post('/api/auth/login', data)
+
+
+    localStorage.setItem('access_token', res.data.access_token)
+    localStorage.setItem('refresh_token', res.data.refresh_token)
+
+    return res.data
 }
 
-export const loginUser = (data: AuthPayload) => {
-    // URL صحیح: شامل /auth
-    return api({ url: '/api/auth/login', method: 'POST', data })
+export const registerUser = async (data: {
+    name: string
+    email: string
+    password: string
+}) => {
+    const res = await axiosClient.post('/api/auth/register', data)
+    return res.data
 }
