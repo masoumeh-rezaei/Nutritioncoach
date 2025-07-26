@@ -11,6 +11,8 @@ export const loginUser = async (data: AuthPayload) => {
 
     localStorage.setItem('access_token', res.data.access_token)
     localStorage.setItem('refresh_token', res.data.refresh_token)
+    console.log('refresh tocken',res.data.refresh_token)
+    console.log('access tocken',res.data.access_token)
 
     return res.data
 }
