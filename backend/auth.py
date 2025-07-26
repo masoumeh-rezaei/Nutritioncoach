@@ -1,10 +1,10 @@
 # backend/auth.py
 from flask import Blueprint, request, jsonify
-from backend.models import db, User, bcrypt
+from backend.models import db, User
 
 auth_bp = Blueprint('auth', __name__)
 
-# مسیر login (از روز 2)
+
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -18,12 +18,12 @@ def login():
     else:
         return jsonify({"message": "Invalid credentials"}), 401
 
-# مسیر register (وظیفه امروز - روز 4)
+
 @auth_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
 
-    # بررسی وجود تمام فیلدهای لازم: نام، ایمیل، و رمز عبور
+
     if not data or not data.get('name') or not data.get('email') or not data.get('password'):
         return jsonify({"message": "Name, email, and password are required"}), 400
 

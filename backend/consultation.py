@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from backend.models import db, Consultation
 from flask_cors import CORS
-import traceback # این خط رو اضافه کن
+import traceback
 
 consultation_bp = Blueprint('consultation', __name__)
 CORS(consultation_bp)
@@ -20,7 +20,7 @@ def submit_consultation():
     try:
         consultation = Consultation(
 
-            user_id=data['userId'], # مطمئن شو که این کلید (userId) در دیکشنری 'data' هست
+            user_id=data['userId'],
             goal=data.get('goal'),
             age=data.get('age'),
             weight=data.get('weight'),

@@ -10,12 +10,12 @@ from backend.consultation import consultation_bp
 
 
 def create_app():
-    app = Flask(__name__) # 👈 اول app رو ایجاد می‌کنیم
+    app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = 'your_super_secret_key_change_this!'
 
-    CORS(app, origins=["http://localhost:3000"]) # به جای CORS(app)
+    CORS(app, origins=["http://localhost:3000"])
     CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
     db.init_app(app)
