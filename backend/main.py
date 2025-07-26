@@ -7,7 +7,7 @@ from backend.auth import auth_bp
 from flask_migrate import Migrate
 from backend.consultation import consultation_bp
 from flask_jwt_extended import JWTManager
-
+from datetime import timedelta
 
 
 def create_app():
