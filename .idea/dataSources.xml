@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
     <data-source source="LOCAL" name="your_database" uuid="6eee27d5-ba2c-4c71-8ca0-1198b720c91a">
-      <driver-ref>aaefc74e-f2c9-4ecc-961a-e41f76aa80ef</driver-ref>
+      <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:C:\Users\amir0\Desktop\Nutritioncoach\backend\instance\your_database.db</jdbc-url>
@@ -68,7 +68,7 @@
       </libraries>
     </data-source>
     <data-source source="LOCAL" name="your_database [2]" uuid="b91d2848-7e9c-41ea-9712-7be4d13016a4">
-      <driver-ref>aaefc74e-f2c9-4ecc-961a-e41f76aa80ef</driver-ref>
+      <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:C:\Users\ALI\nutritioncoach\backend\instance\your_database.db</jdbc-url>

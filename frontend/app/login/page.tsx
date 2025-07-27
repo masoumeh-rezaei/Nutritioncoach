@@ -16,14 +16,11 @@ export default function LoginPage() {
         loginMutation.mutate(
             { email, password },
             {
-                onSuccess: (response) => {
-                    if (response?.access_token && response?.refresh_token) {
-                        localStorage.setItem('access_token', response.access_token)
-                        localStorage.setItem('refresh_token', response.refresh_token)
+                onSuccess: () => {
                     setEmail('')
                     setPassword('')
-                    setTimeout(() => router.push('/form'), 1500)
-                }}
+                    router.push('/form')
+                },
             }
         )
     }
