@@ -48,7 +48,6 @@ def protected():
     user_id = get_jwt_identity()
     return jsonify(message=f"Hello user {user_id}! You have access."), 200
 
-
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -59,21 +58,21 @@ def login():
     if not user or not user.check_password(data['password']):
         return jsonify({"message": "Invalid credentials"}), 401
 
-
     access_token = create_access_token(identity=user.id)
     refresh_token = create_refresh_token(identity=user.id)
 
+    response = jsonify({
+        "message": "Login successful",
+        "user": {
+            "id": user.id,
+            "email": user.email
+        }
+    })
 
+    set_access_cookies(response, access_token, max_age=86400)
+    set_refresh_cookies(response, refresh_token, max_age=7 * 86400)
 
-    response = jsonify({"message": "Login successful"})
-
-    set_access_cookies(response, access_token)
-    set_refresh_cookies(response, refresh_token)
-    print('refresh',access_token)
-    print('access',refresh_token)
     return response, 200
-
-
 
 @auth_bp.route('/refresh', methods=['POST'])
 @jwt_required(refresh=True, locations=["cookies"])

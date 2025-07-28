@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-# backend/main.py
-import sys
-import os
 
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
-=======
+# backend/main.py
+
+
 # backend/app.py
 from flask import Flask
 from flask_cors import CORS
@@ -13,9 +10,9 @@ from backend.auth import auth_bp
 from flask_migrate import Migrate
 from backend.consultation import consultation_bp
 from flask_jwt_extended import JWTManager
-from datetime import timedelta
+from datetime  import timedelta
 from backend.profile import profile_bp
->>>>>>> 3fc70dc7725369dd95ef27b32d202c0487b4474d
+
 
 def create_app():
     app = Flask(__name__)
