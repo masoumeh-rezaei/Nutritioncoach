@@ -16,11 +16,11 @@ export default function LoginPage() {
         loginMutation.mutate(
             { email, password },
             {
-                onSuccess: () => {
-                    setEmail('')
-                    setPassword('')
+                onSuccess: (data) => {
+                    console.log('Login success', data)
                     router.push('/form')
-                },
+                }
+
             }
         )
     }
@@ -69,6 +69,10 @@ export default function LoginPage() {
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition"
                 >
                     {loginMutation.isPending ? 'Logging in...' : 'Login'}
+                </button>
+
+                <button onClick={() => router.push('/form')}>
+                    Go to Form
                 </button>
             </form>
         </div>

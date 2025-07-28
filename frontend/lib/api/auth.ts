@@ -1,13 +1,16 @@
 import axiosClient from '@/lib/axiosClient'
-
+import {api} from "@/lib/api";
 type LoginData = {
     email: string
     password: string
 }
 
 export const loginUser = async (data: LoginData) => {
-    const res = await axiosClient.post('/api/auth/login', data)
-    return res.data
+    return await api({
+        url: '/api/auth/login',
+        method: 'POST',
+        data,
+    })
 }
 
 export const registerUser = async (data: {

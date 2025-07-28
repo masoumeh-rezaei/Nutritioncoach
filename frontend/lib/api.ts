@@ -1,8 +1,9 @@
+// lib/api/fetcher.ts
 export const api = async ({
-  url,
-  method,
-  data,
-}: {
+                            url,
+                            method,
+                            data,
+                          }: {
   url: string
   method: string
   data?: any
@@ -12,7 +13,7 @@ export const api = async ({
     headers: {
       'Content-Type': 'application/json',
     },
-    credentials: 'include', // 👈 ارسال خودکار کوکی‌ها به بک‌اند
+    credentials: 'include',
     body: data ? JSON.stringify(data) : undefined,
   })
 
