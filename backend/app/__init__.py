@@ -1,18 +1,18 @@
 # backend/app/__init__.py
 
 from flask import Flask
+from app.utils.extensions import db, bcrypt
 from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
+#from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 
-db = SQLAlchemy()
-bcrypt = Bcrypt()
+# db = SQLAlchemy()
+# bcrypt = Bcrypt()
 
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your-secret-key'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config.from_object('app.config.Config')
 
     db.init_app(app)
     bcrypt.init_app(app)
