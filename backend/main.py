@@ -12,7 +12,7 @@ from backend.consultation import consultation_bp
 from flask_jwt_extended import JWTManager
 from datetime  import timedelta
 from backend.profile import profile_bp
-
+from backend.feedback import feedback_bp
 
 def create_app():
 
