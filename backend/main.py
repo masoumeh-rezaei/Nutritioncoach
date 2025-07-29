@@ -29,7 +29,6 @@ def create_app():
     app.config['JWT_ACCESS_COOKIE_NAME'] = 'access_token'
     app.config['JWT_REFRESH_COOKIE_NAME'] = 'refresh_token'
 
-
     # چون لوکال HTTP هستیم، secure باید False باشه
     app.config['JWT_COOKIE_SECURE'] = False
 
