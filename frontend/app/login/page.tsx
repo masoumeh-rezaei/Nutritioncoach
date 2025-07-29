@@ -18,6 +18,7 @@ export default function LoginPage() {
             {
                 onSuccess: (data) => {
                     console.log('Login success', data)
+
                     router.push('/form')
                 }
 
