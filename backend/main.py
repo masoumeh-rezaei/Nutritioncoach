@@ -40,7 +40,7 @@ def create_app():
 
 # CORS(app, origins=["http://localhost:3000"])
     # CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
-    CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
+    CORS(app, supports_credentials=True, origins=["http://localhost:3000", "http://127.0.0.1:3000"])
 
     db.init_app(app)
     bcrypt.init_app(app)
