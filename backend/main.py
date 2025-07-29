@@ -17,7 +17,6 @@ from backend.feedback import feedback_bp
 def create_app():
 
     app = Flask(__name__)
-    CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = 'your_super_secret_key_change_this!'
@@ -42,7 +41,7 @@ def create_app():
 
 # CORS(app, origins=["http://localhost:3000"])
     # CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
-
+    CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
 
     db.init_app(app)
     bcrypt.init_app(app)

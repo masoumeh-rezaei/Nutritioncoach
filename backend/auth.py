@@ -47,18 +47,10 @@ def register():
 def protected():
     user_id = get_jwt_identity()
     return jsonify(message=f"Hello user {user_id}! You have access."), 200
-from flask import Blueprint, request, jsonify
-from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies
-from models import User  # فرض بر اینه که مدل User تعریف شده
-from werkzeug.security import check_password_hash  # اگر این رو استفاده می‌کنی
-from datetime import timedelta
-
-auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-
     if not data or not data.get('email') or not data.get('password'):
         return jsonify({"message": "Email and password required"}), 400
 
@@ -66,20 +58,17 @@ def login():
     if not user or not user.check_password(data['password']):
         return jsonify({"message": "Invalid credentials"}), 401
 
-    # ساختن توکن‌ها
-    access_token = create_access_token(identity=user.id, expires_delta=timedelta(days=1))
-    refresh_token = create_refresh_token(identity=user.id, expires_delta=timedelta(days=7))
+    access_token = create_access_token(identity=user.id)
+    refresh_token = create_refresh_token(identity=user.id)
 
-    # پاسخ JSON با کوکی
-    response = make_response(jsonify({
+    response = jsonify({
         "message": "Login successful",
         "user": {
             "id": user.id,
             "email": user.email
         }
-    }))
+    })
 
-    # ست کردن کوکی‌ها (HttpOnly + Secure)
     set_access_cookies(response, access_token, max_age=86400)
     set_refresh_cookies(response, refresh_token, max_age=7 * 86400)
 
@@ -99,4 +88,3 @@ def logout():
     response = jsonify({"message": "Logout successful"})
     unset_jwt_cookies(response)
     return response, 200
-
